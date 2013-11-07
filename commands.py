@@ -20,8 +20,8 @@ def help(args):
     return 'I only do %test right now...'
 
 @irc_command('user')
-def test(args):
-    return 'Hello!'
+def source(args):
+    return 'https://github.com/stranac/raritythebot'
 
 
 @irc_command('admin')
