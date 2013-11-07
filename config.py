@@ -1,1 +1,1 @@
-ADMINS = {'stranac': 'sd98asc9a8s6c9ascasc89as67sa97c98sa8c9as969a'}
+ADMINS = {'stranac': 'ch8eg87agdc87dtg87awd9wqdz8agdoadgw78adatw7owtg'}
