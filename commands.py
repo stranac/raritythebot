@@ -17,7 +17,7 @@ class irc_command(object):
 
 @irc_command('user')
 def help(args):
-    return 'I only do %test right now...'
+    return '%source: get link to my source code'
 
 @irc_command('user')
 def source(args):

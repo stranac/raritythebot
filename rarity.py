@@ -26,7 +26,7 @@ class RarityIRCProtocol(irc.IRCClient):
         self.deferred.errback(reason)
 
     def signedOn(self):
-        for channel in self.factory.channels:
+        for channel in config.channels:
             self.join(channel)
         log.msg('Joined all channels')
 
@@ -78,14 +78,14 @@ class RarityIRCProtocol(irc.IRCClient):
             self.admins.add(user)
 
     def userLeft(self, nick, whatever):
-        if nick in self.admins:
+        try:
             self.admins.remove(nick)
+        except KeyError:
+            pass
     userQuit = userLeft
 
 
 class RarityIRCFactory(protocol.ReconnectingClientFactory):
-    channels = ['##testing-rarity-36512736712618746', '#python-forum']
-
     def clientConnectionLost(self, connector, reason):
         """If we get disconnected, reconnect to server."""
         connector.connect()
