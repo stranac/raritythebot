@@ -12,7 +12,7 @@ from twisted.python import log
 from twisted.words.protocols import irc
 
 from commands import irc_commands, admin_commands
-from config import ADMINS
+import config
 
 
 class RarityIRCProtocol(irc.IRCClient):
@@ -36,10 +36,10 @@ class RarityIRCProtocol(irc.IRCClient):
         message = message.strip()
 
         # not a trigger command
-        if not message.startswith('%'):
+        if not message.startswith(config.trigger):
             return
 
-        command, sep, rest = message.lstrip('%').partition(' ')
+        command, sep, rest = message.lstrip(config.trigger).partition(' ')
         # handle admin login
         if command == 'login':
             self._login(nick, rest)
@@ -75,7 +75,7 @@ class RarityIRCProtocol(irc.IRCClient):
         return failure.getErrorMessage()
 
     def _login(self, user, password):
-        if ADMINS.get(user) == password:
+        if config.ADMINS.get(user) == password:
             self.admins.add(user)
 
     def userLeft(self, nick, whatever):
