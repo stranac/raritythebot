@@ -68,7 +68,6 @@ class RarityIRCProtocol(irc.IRCClient):
         """
         if ' >> ' in msg:
             msg, _, target = msg.partition(' >> ')
-        print msg, target
         self.msg(target, msg)
 
     def _showError(self, failure):
