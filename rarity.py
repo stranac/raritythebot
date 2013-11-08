@@ -75,7 +75,7 @@ class RarityIRCProtocol(irc.IRCClient):
         return failure.getErrorMessage()
 
     def _login(self, user, password):
-        if config.ADMINS.get(user) == password:
+        if config.admins.get(user) == password:
             self.admins.add(user)
 
     def userLeft(self, nick, whatever):
