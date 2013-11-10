@@ -54,20 +54,14 @@ class RarityIRCProtocol(irc.IRCClient):
             if func is None:
                 return
 
-        d = defer.maybeDeferred(func, rest)
+        d = defer.maybeDeferred(func, rest, self)
         d.addErrback(self._showError)
         d.addCallback(self._sendMessage, channel)
 
 
     def _sendMessage(self, msg, target):
-        """
-        'message >> target' sends message to target.
-
-        If no redirection is present, send the message to
-        wherever the command was received from.
-        """
-        if ' >> ' in msg:
-            msg, _, target = msg.partition(' >> ')
+        if not msg:
+            return
         self.msg(target, msg)
 
     def _showError(self, failure):
@@ -78,11 +72,22 @@ class RarityIRCProtocol(irc.IRCClient):
             self.admins.add(user)
 
     def userLeft(self, nick, whatever):
+        """
+        If a user leaves/quits/gets kicked, remove him from admins.
+        """
         try:
             self.admins.remove(nick)
         except KeyError:
             pass
-    userQuit = userLeft
+    userQuit = userKicked = userLeft
+
+    def userRenamed(self, oldname, newname):
+        """
+        If an admin changes their nick, make sure they are still admin.
+        """
+        if oldname in self.admins:
+            self.admins.remove(oldname)
+            self.admins.add(newname)
 
 
 class RarityIRCFactory(protocol.ReconnectingClientFactory):

@@ -28,7 +28,7 @@ class irc_command(object):
 
 
 @irc_command('user')
-def help(args):
+def help(args, bot):
     """
     help: show all available commands.
     help <command>: show help for a single command.
@@ -42,14 +42,14 @@ def help(args):
 
 
 @irc_command('user')
-def source(args):
+def source(*args):
     """
     Get a link to my source code.
     """
     return 'https://github.com/stranac/raritythebot'
 
 @irc_command('user')
-def paste(code):
+def paste(code, bot):
     """
     Paste a piece of code to http://bpaste.net/
     Use a semicolon to end a line, multiple semicolons to end blocks.
@@ -64,10 +64,18 @@ def paste(code):
 
 
 @irc_command('admin')
-def say_to(args):
+def say_to(args, bot):
     """
     args: <user or channel> <message>
     Send message to the target.
     """
     target, _, msg = args.partition(' ')
-    return '%s >> %s' % (msg, target)
+    bot.msg(target, msg)
+
+@irc_command('admin')
+def join(channel, bot):
+    """
+    Join channel.
+    """
+    bot.join(channel)
+    return 'Joined %s' % channel
